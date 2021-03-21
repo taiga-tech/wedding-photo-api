@@ -21,21 +21,21 @@ commands:
       - run:
           name: Docker Setup
           command: |
-            docker-compose -f docker-compose.local.yml up -d --build
+            docker-compose -f docker-compose.yml up -d --build
 
   laravel_setup:
     steps:
       - run:
           name: Laravel Setup
           command: |
-            docker-compose -f docker-compose.local.yml run php composer install
+            docker-compose -f docker-compose.yml run php composer install
 
   test_run:
     steps:
       - run:
           name: Run Test
           command: |
-            docker-compose -f docker-compose.local.yml run php php artisan test
+            docker-compose -f docker-compose.yml run php php artisan test
 
   php_image_push:
     steps:
