@@ -28,21 +28,21 @@ commands:
       - run:
           name: Laravel Setup
           command: |
-            docker-compose -f docker-compose.yml run php composer install
+            docker-compose -f docker-compose.yml run api composer install
 
   test_run:
     steps:
       - run:
           name: Run Test
           command: |
-            docker-compose -f docker-compose.yml run php php artisan test
+            docker-compose -f docker-compose.yml run api php artisan test
 
   php_image_push:
     steps:
       - checkout
       - aws-ecr/build-and-push-image:
           path: .
-          dockerfile: ./docker/php/Dockerfile
+          dockerfile: ./docker/api/Dockerfile
           region: AWS_DEFAULT_REGION
           account-url: AWS_ECR_ACCOUNT_URL
           repo: "divingapp_php"
@@ -94,7 +94,7 @@ jobs:
   ecr_push:
     machine: true
     steps:
-      - php_image_push
+      - api_image_push
       - nginx_image_push
       - ecr_notification
 
