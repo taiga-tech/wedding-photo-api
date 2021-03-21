@@ -1,0 +1,134 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+  aws-ecr: circleci/aws-ecr@6.14.0
+  aws-ecs: circleci/aws-ecs@1.4.0
+
+# ---------------- Commands ----------------
+
+commands:
+  env_setup:
+    steps:
+      - run:
+          name: ENV Setup
+          command: |
+            echo $ENV_FILE | base64 -di > .env
+            echo $TEST_ENV_FILE | base64 -di > src/.env.testing
+
+  docker_setup:
+    steps:
+      - run:
+          name: Docker Setup
+          command: |
+            docker-compose -f docker-compose.local.yml up -d --build
+
+  laravel_setup:
+    steps:
+      - run:
+          name: Laravel Setup
+          command: |
+            docker-compose -f docker-compose.local.yml run php composer install
+
+  test_run:
+    steps:
+      - run:
+          name: Run Test
+          command: |
+            docker-compose -f docker-compose.local.yml run php php artisan test
+
+  php_image_push:
+    steps:
+      - checkout
+      - aws-ecr/build-and-push-image:
+          path: .
+          dockerfile: ./docker/php/Dockerfile
+          region: AWS_DEFAULT_REGION
+          account-url: AWS_ECR_ACCOUNT_URL
+          repo: "divingapp_php"
+
+  nginx_image_push:
+    steps:
+      - checkout
+      - aws-ecr/build-and-push-image:
+          path: .
+          dockerfile: ./docker/nginx/Dockerfile
+          region: AWS_DEFAULT_REGION
+          account-url: AWS_ECR_ACCOUNT_URL
+          repo: "divingapp_nginx"
+
+  test_notification:
+    steps:
+      - slack/status:
+          success_message: ':circleci-success: $CIRCLE_BRANCH のテストが完了しました\n\n:github-wh: User：$CIRCLE_USERNAME'
+          failure_message: ':circleci-failed: $CIRCLE_BRANCH のテストが失敗しました\n\n:github-wh: User：$CIRCLE_USERNAME'
+          webhook: '${SLACK_WEBHOOK}'
+
+  ecr_notification:
+    steps:
+      - slack/status:
+          success_message: ':circleci-success: ECRへのPUSHが完了しました'
+          failure_message: ':circleci-failed: ECRへのPUSHに失敗しました'
+          webhook: '${SLACK_WEBHOOK}'
+
+  deploy_notification:
+    steps:
+      - slack/status:
+          success_message: ':circleci-success: $CIRCLE_BRANCH のデプロイが完了しました\n\n:github-wh: User：$CIRCLE_USERNAME'
+          failure_message: ':circleci-failed: $CIRCLE_BRANCH のデプロイに失敗しました\n\n:github-wh: User：$CIRCLE_USERNAME'
+          webhook: '${SLACK_WEBHOOK}'
+
+# ---------------- Jobs ----------------
+
+jobs:
+  test:
+    machine: true
+    steps:
+      - checkout
+      - env_setup
+      - docker_setup
+      - laravel_setup
+      - test_run
+      - test_notification
+
+  ecr_push:
+    machine: true
+    steps:
+      - php_image_push
+      - nginx_image_push
+      - ecr_notification
+
+  deploy_master:
+    machine: true
+    steps:
+      - ecs_fargate_deploy
+      - deploy_notification
+
+# ---------------- Workflows ----------------
+
+workflows:
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+                ignore: master
+
+  test_and_deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+                only: master
+      # - ecr_push:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #           only: master
+      # # - deploy_master:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #           only: master

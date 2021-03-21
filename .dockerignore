@@ -1,0 +1,4 @@
+src/bootstrap/cache/*
+src/storage/app/public/*
+src/storage/framework/*/*
+src/storage/log/*
