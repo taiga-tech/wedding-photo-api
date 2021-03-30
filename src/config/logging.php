@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'discord'],
             'ignore_exceptions' => false,
         ],
 
@@ -59,7 +59,16 @@ return [
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
+            'level' => env('LOG_SLACK_LEVEL', 'critical'),
+        ],
+
+        'discord' => [
+            'driver' => 'custom',
+            'via' => KABBOUCHI\LoggerDiscordChannel\DiscordLogger::class,
+            'webhook' => env('LOG_DISCORD_WEBHOOK_URL'),
+            'level' => env('LOG_SLACK_LEVEL', 'critical'),
+            'role_id' => null, // role to tag in the error
+            'environment' => env('APP_ENV','production'),
         ],
 
         'papertrail' => [
