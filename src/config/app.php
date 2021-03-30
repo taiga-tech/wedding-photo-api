@@ -54,7 +54,11 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'aws_cdn_url' => env('AWS_CDN_URL'),
+
     'asset_url' => env('ASSET_URL', null),
+
+    "cliant_url" => env('CORS_ALLOWED_ORIGIN'),
 
     /*
     |--------------------------------------------------------------------------
