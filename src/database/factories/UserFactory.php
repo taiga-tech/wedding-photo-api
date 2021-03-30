@@ -22,10 +22,18 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        // return [
+        //     'name' => $this->faker->name,
+        //     // 'login_id' => $this->faker->unique()->name,
+        //     'login_id' => 'login_id',
+        //     // 'email_verified_at' => now(),
+        //     'login_id_verified_at' => now(),
+        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        //     'remember_token' => Str::random(10),
+        // ];
         return [
-            'name' => $this->faker->name,
-            'login_id' => $this->faker->unique()->name,
-            // 'email_verified_at' => now(),
+            'name' => '2021-05-22_takahiro&michika',
+            'login_id' => 'login_id',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];
@@ -40,7 +48,7 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'email_verified_at' => null,
+                'login_id_verified_at' => null,
             ];
         });
     }
