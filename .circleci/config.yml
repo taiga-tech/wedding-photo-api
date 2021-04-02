@@ -71,7 +71,7 @@ commands:
           command: |
             curl -sS -XPOST -H "Content-Type: application/json" \
             -d '{
-              "content": ":newspaper: [Coverage report](https://'"$CIRCLE_BUILD_NUM"'-{ID}-gh.circle-artifacts.com/0/build/coverage-report/index.html)\n:green_circle: '"$CIRCLE_BRANCH"'のテストが完了しました\n User: '"$CIRCLE_USERNAME"'"}' \
+              "content": ":newspaper: [Coverage report]('"$CIRCLE_BUILD_URL: $CIRCLE_PREVIOUS_BUILD_NUM"')\n:green_circle: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n User: '"$CIRCLE_USERNAME"'"}' \
             $DISCORD_WEB_HOOK_URL >/dev/null
 
   ecr_notification:
