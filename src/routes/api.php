@@ -20,6 +20,35 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 
+Route::group(['middleware' => 'api'], function ()
+{
+    Route::post('/register', [RegisterController::class, 'register'])
+        ->name('register');
+
+    Route::post('/login', [LoginController::class, 'login'])
+        ->name('login');
+
+    Route::post('/logout', [LoginController::class, 'logout'])
+        ->name('logout');
+
+    Route::get('/current_user', function () {
+        return Auth::user();
+    });
+
+    //----------------------------------------------------------------
+    Route::apiResource('/posts', PostsController::class)
+        ->except('index', 'show', 'update', 'destroy');
+
+    Route::get('/posts/{download}', [PostsController::class, 'download'])
+        ->name('download');
+
+    Route::get('/room/{roomId}', [RoomController::class, 'index'])
+        ->name('roomIndex');
+
+});
+
+
+
 // Route::get('/user', fn() => Auth::user())->name('user');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -34,31 +63,3 @@ use App\Http\Controllers\Auth\RegisterController;
 // });
 
 // -----------------
-
-Route::group(['middleware' => 'api'], function ()
-{
-    // Route::post('/register', [RegisterController::class, 'register'])
-        // ->name('register');
-
-    Route::post('/login', [LoginController::class, 'login'])
-        ->name('login');
-
-    Route::post('/logout', [LoginController::class, 'logout'])
-        ->name('logout');
-
-    Route::get('/current_user', function () {
-        return Auth::user();
-    });
-
-    //----------------------------------------------------------------
-    // Route::group(['prefix' => 'user'], function (User $user) {
-    Route::apiResource('/posts', PostsController::class)
-        ->except('index', 'show', 'update', 'destroy');
-    // });
-
-    Route::get('/room/{roomId}', [RoomController::class, 'index']);
-    Route::get(
-        '/room/{roomId}/photos/{id}',
-        [RoomController::class, 'show']
-    );
-});

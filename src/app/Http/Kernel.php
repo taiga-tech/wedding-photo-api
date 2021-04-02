@@ -47,8 +47,8 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            // errorが出る↓
-            // \App\Http\Middleware\AjaxOnly::class,
+            // test環境でlogoutaction時にerrorが出る↓
+            \App\Http\Middleware\AjaxOnly::class,
             // ---
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,

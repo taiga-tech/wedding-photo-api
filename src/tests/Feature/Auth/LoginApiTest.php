@@ -23,10 +23,15 @@ class LoginApiTest extends TestCase
      */
     public function should_登録済みのユーザーを認証して返却する()
     {
-        $response = $this->json('POST', route('login'), [
-            'login_id' => $this->user->login_id,
-            'password' => 'password',
-        ]);
+        $response = $this
+            ->json(
+                'POST',
+                route('login'), [
+                'login_id' => $this->user->login_id,
+                'password' => 'password',
+                ],
+                ['X-Requested-With' => 'XMLHttpRequest']
+            );
 
         $response
             ->assertStatus(200)
