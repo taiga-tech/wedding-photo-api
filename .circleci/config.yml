@@ -21,7 +21,7 @@ commands:
       - run:
           name: Docker Setup
           command: |
-            docker-compose -f docker-compose.yml up -d --build
+            docker-compose -f docker-compose.yml up -d
 
   laravel_setup:
     steps:
