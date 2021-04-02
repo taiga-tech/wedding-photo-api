@@ -64,7 +64,7 @@ commands:
           failure_message: ':circleci-failed: $CIRCLE_BRANCH のテストが失敗しました\n\n:github-wh: User：$CIRCLE_USERNAME'
           webhook: '${SLACK_WEBHOOK}'
 
-  test_notification_for_discord:
+  test_notification_to_discord:
     steps:
       - run:
           name: Notify to discord
