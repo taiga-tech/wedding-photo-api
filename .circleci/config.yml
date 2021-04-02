@@ -64,6 +64,15 @@ commands:
           failure_message: ':circleci-failed: $CIRCLE_BRANCH のテストが失敗しました\n\n:github-wh: User：$CIRCLE_USERNAME'
           webhook: '${SLACK_WEBHOOK}'
 
+  test_notification_for_discord:
+    steps:
+      - run:
+          name: Notify to discord
+          command: |
+            curl -sS -XPOST -H "Content-Type: application/json" \
+            -d '{"content": ":newspaper: [Coverage report](https://'"$CIRCLE_BUILD_NUM"'-{ID}-gh.circle-artifacts.com/0/build/coverage-report/index.html)"}' \
+            $DISCORD_WEB_HOOK_URL >/dev/null
+
   ecr_notification:
     steps:
       - slack/status:
@@ -89,7 +98,8 @@ jobs:
       - docker_setup
       - laravel_setup
       - test_run
-      - test_notification
+      - test_notification_for_discord
+      # - test_notification
 
   ecr_push:
     machine: true
