@@ -98,7 +98,7 @@ jobs:
       - docker_setup
       - laravel_setup
       - test_run
-      - test_notification_for_discord
+      - test_notification_to_discord
       # - test_notification
 
   ecr_push:
