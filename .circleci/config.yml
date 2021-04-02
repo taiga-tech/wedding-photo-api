@@ -71,7 +71,8 @@ commands:
           command: |
             curl -sS -XPOST -H "Content-Type: application/json" \
             -d '{
-              "content": ":newspaper: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n:green_circle: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n User: '"$CIRCLE_USERNAME"'"}' \
+              "content": ":newspaper: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'"
+              }' \
             $DISCORD_WEB_HOOK_URL >/dev/null
 
   ecr_notification:
