@@ -15,7 +15,7 @@ class PostsController extends Controller
 
     public function __construct(Post $posts)
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         $this->posts = $posts;
     }
 
@@ -73,13 +73,13 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        // $post = $this->posts->find($id);
-        $post = Post::with('user', 'photos')->find($id);
+    // public function show($id)
+    // {
+    //     // $post = $this->posts->find($id);
+    //     $post = Post::with('user', 'photos')->find($id);
 
-        return $post;
-    }
+    //     return $post;
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -141,5 +141,12 @@ class PostsController extends Controller
         $image->delete();
 
         return $image;
+    }
+
+    public function download(Request $request, $download)
+    {
+        $input = $request->query();
+        $path = Storage::disk('s3')->download('2021-05-22_takahiro&michika/post/photos/1/20210330-141321_0.jpg');
+        return $path;
     }
 }
