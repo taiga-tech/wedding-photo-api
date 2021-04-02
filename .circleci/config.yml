@@ -71,12 +71,12 @@ commands:
           command: |
             curl -sS -XPOST -H "Content-Type: application/json" \
             -d '{
+              "content": "Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'",
               "embeds": [{
-                "description": "Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n
-                Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n
-                User: '"$CIRCLE_USERNAME"'",
+                "description": "Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'",
                 "color": 5620992,
-              }]}' \
+              }]
+              }' \
             $DISCORD_WEB_HOOK_URL >/dev/null
 
   ecr_notification:
