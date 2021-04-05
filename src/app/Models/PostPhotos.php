@@ -11,6 +11,7 @@ class PostPhotos extends Model
 
     protected $fillable = [
         'path',
+        'aspect',
         'post_id'
     ];
 

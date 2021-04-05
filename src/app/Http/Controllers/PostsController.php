@@ -48,7 +48,7 @@ class PostsController extends Controller
         $timeStamp = date('Ymd-His');
         if ($files)
         {
-            foreach ($files as $index=> $e)
+            foreach ($files as $index => $e)
             {
                 $ext = $e['photo']->guessExtension();
                 $filename = "{$timeStamp}_{$index}.{$ext}";
@@ -60,7 +60,11 @@ class PostsController extends Controller
                     );
                 // $path = Storage::disk('s3')->url($photo);
                 // $path = config('app.cdn_url') . $photo;
-                $post->photos()->create([ 'path' => $photo ]);
+                $post->photos()
+                    ->create([
+                        'path' => $photo,
+                        'aspect' => $input['aspect'][$index],
+                    ]);
             }
         }
 
