@@ -32,16 +32,18 @@ class PhotoSubmitApiTest extends TestCase
         Storage::fake('s3');
 
         $photos = [];
+        $aspects = [];
         for ($i = 1; $i <= 6; $i++)
         {
             array_push($photos, array( 'photo' => UploadedFile::fake()->image("photo{$i}.png") ));
+            array_push($aspects, 1);
         }
-
         $response = $this
             ->actingAs($this->user)
             ->json('POST', route('posts.store'), $data = [
                 'nickname' => $this->faker->name,
                 'message' => $this->faker->name,
+                'aspect' => $aspects,
                 'files' => $photos,
             ], ['X-Requested-With' => 'XMLHttpRequest']);
 
