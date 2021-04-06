@@ -32,7 +32,7 @@ class UserFactory extends Factory
         //     'remember_token' => Str::random(10),
         // ];
         return [
-            'name' => '2021-05-22_takahiro&michika',
+            'name' => 'TAKAHIRO&MICHIKA',
             'login_id' => 'login_id',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
