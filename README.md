@@ -1,6 +1,7 @@
 # Weddinga Photo App
 
 [![CircleCI](https://circleci.com/gh/taiga-tech/wedding-photo-api.svg?style=shield&circle-token=9ab6c1be310b621ccc287c53163200249bec0b74)](https://app.circleci.com/pipelines/github/taiga-tech/wedding-photo-api/)
+[![MIT License](https://img.shields.io/github/license/taiga-tech/wedding-photo-api)](LICENSE)
 
 ## Description
 API for sharing photos of weddings and wedding receptions
