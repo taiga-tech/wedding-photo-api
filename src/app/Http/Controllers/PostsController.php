@@ -24,13 +24,13 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    // public function index()
+    // {
         // $posts = $this->posts->all();
-        $posts = Post::with('user', 'photos')->get();
+        // $posts = Post::with('user', 'photos')->get();
 
-        return response($posts, 200);
-    }
+        // return response($posts, 200);
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -92,35 +92,35 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $post = $this->posts->find($id);
-        $input = $request->all();
-        $input['user_id'] = Auth::id();
-        $files = $request->file('files');
-        $post->update($input);
-        $timeStamp = date('Ymd-His');
+    // public function update(Request $request, $id)
+    // {
+    //     $post = $this->posts->find($id);
+    //     $input = $request->all();
+    //     $input['user_id'] = Auth::id();
+    //     $files = $request->file('files');
+    //     $post->update($input);
+    //     $timeStamp = date('Ymd-His');
 
-        if ($files)
-        {
-            foreach ($files as $index=> $e)
-            {
-                $ext = $e['photo']->guessExtension();
-                $filename = "{$timeStamp}_{$index}.{$ext}";
-                $photo = Storage::disk('s3')
-                    ->putFileAs(
-                        Auth::user()->name.'post/photos/'.$post->id,
-                        $e['photo'], $filename,
-                        'public'
-                    );
-                // $path = Storage::disk('s3')->url($photo);
-                // $path = config('app.cdn_url') . $photo;
-                $post->photos()->create(['path'=> $photo]);
-            }
-        }
+    //     if ($files)
+    //     {
+    //         foreach ($files as $index=> $e)
+    //         {
+    //             $ext = $e['photo']->guessExtension();
+    //             $filename = "{$timeStamp}_{$index}.{$ext}";
+    //             $photo = Storage::disk('s3')
+    //                 ->putFileAs(
+    //                     Auth::user()->name.'post/photos/'.$post->id,
+    //                     $e['photo'], $filename,
+    //                     'public'
+    //                 );
+    //             // $path = Storage::disk('s3')->url($photo);
+    //             // $path = config('app.cdn_url') . $photo;
+    //             $post->photos()->create(['path'=> $photo]);
+    //         }
+    //     }
 
-        return $post;
-    }
+    //     return $post;
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -128,24 +128,24 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $post = $this->posts->find($id);
-        if (Auth::id() === 2)
-        {
-            $post->delete();
-        }
+    // public function destroy($id)
+    // {
+    //     $post = $this->posts->find($id);
+    //     if (Auth::id() === 2)
+    //     {
+    //         $post->delete();
+    //     }
 
-        return $post;
-    }
+    //     return $post;
+    // }
 
-    public function imageDestroy($id)
-    {
-        $image = PostImage::find($id);
-        $image->delete();
+    // public function imageDestroy($id)
+    // {
+    //     $image = PostImage::find($id);
+    //     $image->delete();
 
-        return $image;
-    }
+    //     return $image;
+    // }
 
     public function download(Request $request, $download)
     {
