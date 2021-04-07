@@ -70,7 +70,7 @@ commands:
           name: Notify to discord
           command: |
             curl -sS -XPOST -H "Content-Type: application/json" \
-            -d '{"content": "Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'"}' \
+            -d '{"content": "Project: '"$CIRCLE_PROJECT_REPONAME"'\n\n Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'"}' \
             $DISCORD_WEB_HOOK_URL >/dev/null
 
   ecr_notification:
