@@ -12,10 +12,16 @@ class Post extends Model
     protected $fillable = [
         'nickname',
         'message',
+        'user_id',
     ];
 
-    public function photo()
+    public function user()
     {
-        return $this->hasMany('App\Models\PostPhoto');
+        return $this->belongsTo(User::class);
+    }
+
+    public function photos()
+    {
+        return $this->hasMany(PostPhotos::class);
     }
 }

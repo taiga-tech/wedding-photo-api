@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Tests\TestCase;
@@ -23,12 +23,18 @@ class RegisterApiTest extends TestCase
             'password_confirmation' => 'test1234',
         ];
 
-        $response = $this->json('POST', route('register'), $data);
+        $response = $this->json(
+            'POST',
+            route('register'),
+            $data,
+            ['X-Requested-With' => 'XMLHttpRequest']
+        );
+
+        // dd($response->headers->get('X-Requested-With'));
 
         $user = User::first();
         $this->assertEquals($data['name'], $user->name);
 
-        // dd($response);
         $response
             ->assertStatus(201)
             ->assertJson(['name' => $user->name]);

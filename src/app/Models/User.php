@@ -21,6 +21,7 @@ class User extends Authenticatable
         'login_id',
         // 'email',
         'password',
+        'role',
     ];
 
     /**
@@ -38,7 +39,14 @@ class User extends Authenticatable
      *
      * @var array
      */
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    // ];
+    protected $casts = [
+        'login_id_verified_at' => 'datetime',
+    ];
+
+    // -----------------------------------
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

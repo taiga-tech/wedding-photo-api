@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+use App\Models\User;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,11 +19,32 @@ use Illuminate\Http\Request;
 |
 */
 
-Auth::routes();
-Route::get('/user', fn() => Auth::user())->name('user');
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::group(['middleware' => 'api'], function ()
+{
+    Route::post('/register', [RegisterController::class, 'register'])
+        ->name('register');
 
-Route::apiResource('posts', PostsController::class);
+    Route::post('/login', [LoginController::class, 'login'])
+        ->name('login');
+
+    Route::post('/logout', [LoginController::class, 'logout'])
+        ->name('logout');
+
+    Route::get('/current_user', function () {
+        return Auth::user();
+    });
+
+    //----------------------------------------------------------------
+    Route::apiResource('/posts', PostsController::class)
+        ->except('index', 'show', 'update', 'destroy');
+
+    Route::get('/room/{roomId}', [RoomController::class, 'index']);
+
+    Route::get('/posts/{download}', [PostsController::class, 'download']);
+});
+
+Route::middleware(['auth','can:isAdmin'])->group(function(){
+    Route::apiResource('/admin', AdminController::class)
+        ->except('update');
+});

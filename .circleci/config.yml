@@ -21,28 +21,28 @@ commands:
       - run:
           name: Docker Setup
           command: |
-            docker-compose -f docker-compose.local.yml up -d --build
+            docker-compose -f docker-compose.yml up -d
 
   laravel_setup:
     steps:
       - run:
           name: Laravel Setup
           command: |
-            docker-compose -f docker-compose.local.yml run php composer install
+            docker-compose -f docker-compose.yml run api composer install
 
   test_run:
     steps:
       - run:
           name: Run Test
           command: |
-            docker-compose -f docker-compose.local.yml run php php artisan test
+            docker-compose -f docker-compose.yml run api php artisan test
 
   php_image_push:
     steps:
       - checkout
       - aws-ecr/build-and-push-image:
           path: .
-          dockerfile: ./docker/php/Dockerfile
+          dockerfile: ./docker/api/Dockerfile
           region: AWS_DEFAULT_REGION
           account-url: AWS_ECR_ACCOUNT_URL
           repo: "divingapp_php"
@@ -63,6 +63,15 @@ commands:
           success_message: ':circleci-success: $CIRCLE_BRANCH のテストが完了しました\n\n:github-wh: User：$CIRCLE_USERNAME'
           failure_message: ':circleci-failed: $CIRCLE_BRANCH のテストが失敗しました\n\n:github-wh: User：$CIRCLE_USERNAME'
           webhook: '${SLACK_WEBHOOK}'
+
+  test_notification_to_discord:
+    steps:
+      - run:
+          name: Notify to discord
+          command: |
+            curl -sS -XPOST -H "Content-Type: application/json" \
+            -d '{"content": "Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'"}' \
+            $DISCORD_WEB_HOOK_URL >/dev/null
 
   ecr_notification:
     steps:
@@ -89,12 +98,13 @@ jobs:
       - docker_setup
       - laravel_setup
       - test_run
-      - test_notification
+      - test_notification_to_discord
+      # - test_notification
 
   ecr_push:
     machine: true
     steps:
-      - php_image_push
+      - api_image_push
       - nginx_image_push
       - ecr_notification
 

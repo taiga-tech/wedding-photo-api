@@ -11,11 +11,12 @@ class PostPhotos extends Model
 
     protected $fillable = [
         'path',
+        'aspect',
         'post_id'
     ];
 
     public function post()
     {
-        return $this->belongsTo('App\Models\Post');
+        return $this->belongsTo(Post::class);
     }
 }
