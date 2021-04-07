@@ -39,27 +39,12 @@ Route::group(['middleware' => 'api'], function ()
     Route::apiResource('/posts', PostsController::class)
         ->except('index', 'show', 'update', 'destroy');
 
-    Route::get('/posts/{download}', [PostsController::class, 'download'])
-        ->name('download');
+    Route::get('/room/{roomId}', [RoomController::class, 'index']);
 
-    Route::get('/room/{roomId}', [RoomController::class, 'index'])
-        ->name('roomIndex');
-
+    Route::get('/posts/{download}', [PostsController::class, 'download']);
 });
 
-
-
-// Route::get('/user', fn() => Auth::user())->name('user');
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::apiResource('/posts', PostsController::class);
-
-// Route::prefix('posts')->group(function()
-// {
-//     // Route::apiResource('/', PostsController::class);
-//     Route::delete('imagedestroy/{id}', [PostsController::class, 'imageDestroy']);
-// });
-
-// -----------------
+Route::middleware(['auth','can:isAdmin'])->group(function(){
+    Route::apiResource('/admin', AdminController::class)
+        ->except('update');
+});

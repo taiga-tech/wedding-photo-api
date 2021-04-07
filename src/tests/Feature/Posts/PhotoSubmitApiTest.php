@@ -21,6 +21,14 @@ class PhotoSubmitApiTest extends TestCase
     {
         parent::setUp();
 
+        $this->photos = [];
+        $this->aspects = [];
+        for ($i = 1; $i <= 6; $i++)
+        {
+            array_push($this->photos, array( 'photo' => UploadedFile::fake()->image("photo{$i}.jpg") ));
+            array_push($this->aspects, 1);
+        }
+
         $this->user = User::factory()->create();
     }
 
@@ -31,20 +39,13 @@ class PhotoSubmitApiTest extends TestCase
     {
         Storage::fake('s3');
 
-        $photos = [];
-        $aspects = [];
-        for ($i = 1; $i <= 6; $i++)
-        {
-            array_push($photos, array( 'photo' => UploadedFile::fake()->image("photo{$i}.png") ));
-            array_push($aspects, 1);
-        }
         $response = $this
             ->actingAs($this->user)
             ->json('POST', route('posts.store'), $data = [
                 'nickname' => $this->faker->name,
                 'message' => $this->faker->name,
-                'aspect' => $aspects,
-                'files' => $photos,
+                'aspect' => $this->aspects,
+                'files' => $this->photos,
             ], ['X-Requested-With' => 'XMLHttpRequest']);
 
         $response->assertStatus(201);
@@ -77,7 +78,8 @@ class PhotoSubmitApiTest extends TestCase
                 route('posts.store'), [
                     'nickname' => $this->faker->name,
                     'message' => $this->faker->name,
-                    'files' => UploadedFile::fake()->image('photo.jpg'),
+                    'aspect' => $this->aspects,
+                    'files' => $this->photos,
                 ],
                 ['X-Requested-With' => 'XMLHttpRequest']
             );
