@@ -36,6 +36,16 @@ Comming soon...
 
 ## Build Setup
 
+```shell
+git clone https://github.com/taiga-tech/wedding-photo-api.git
+
+cd wedding-photo-api
+
+# Command to set environment variables
+
+docker compose up -d
+```
+
 ## References
 
 - https://github.com/taiga-tech/divingapp/
