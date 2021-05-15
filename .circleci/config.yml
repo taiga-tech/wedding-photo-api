@@ -2,8 +2,8 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@3.4.2
-  aws-ecr: circleci/aws-ecr@6.14.0
-  aws-ecs: circleci/aws-ecs@1.4.0
+  aws-ecr: circleci/aws-ecr@7.0.0
+  aws-ecs: circleci/aws-ecs@2.2.1
 
 # ---------------- Commands ----------------
 
@@ -37,7 +37,7 @@ commands:
           command: |
             docker-compose -f docker-compose.yml run api php artisan test
 
-  php_image_push:
+  api_image_push:
     steps:
       - checkout
       - aws-ecr/build-and-push-image:
@@ -45,7 +45,9 @@ commands:
           dockerfile: ./docker/api/Dockerfile
           region: AWS_DEFAULT_REGION
           account-url: AWS_ECR_ACCOUNT_URL
-          repo: "divingapp_php"
+          repo: "wedding-photo-api_api"
+          tag: "${CIRCLE_SHA1}"
+
 
   nginx_image_push:
     steps:
@@ -55,7 +57,8 @@ commands:
           dockerfile: ./docker/nginx/Dockerfile
           region: AWS_DEFAULT_REGION
           account-url: AWS_ECR_ACCOUNT_URL
-          repo: "divingapp_nginx"
+          repo: "wedding-photo-api_nginx"
+          tag: "${CIRCLE_SHA1}"
 
   test_notification:
     steps:
@@ -71,6 +74,15 @@ commands:
           command: |
             curl -sS -XPOST -H "Content-Type: application/json" \
             -d '{"content": "Build: ['"$CIRCLE_JOB: $CIRCLE_PREVIOUS_BUILD_NUM"']('"$CIRCLE_BUILD_URL"')\n\n Status: ['"$CIRCLE_BRANCH"']('"$CIRCLE_PULL_REQUEST"')のテストが完了しました\n\n User: '"$CIRCLE_USERNAME"'"}' \
+            $DISCORD_WEB_HOOK_URL >/dev/null
+
+  ecr_notification_to_discord:
+    steps:
+      - run:
+          name: Notify to discord
+          command: |
+            curl -sS -XPOST -H "Content-Type: application/json" \
+            -d 'ECRへのPUSHが完了しました' \
             $DISCORD_WEB_HOOK_URL >/dev/null
 
   ecr_notification:
@@ -106,9 +118,10 @@ jobs:
     steps:
       - api_image_push
       - nginx_image_push
-      - ecr_notification
+      - ecr_notification_to_discord
+      # - ecr_notification
 
-  deploy_master:
+  deploy_main:
     machine: true
     steps:
       - ecs_fargate_deploy
@@ -122,23 +135,23 @@ workflows:
       - test:
           filters:
             branches:
-                ignore: master
+                ignore: main
 
   test_and_deploy:
     jobs:
       - test:
           filters:
             branches:
-                only: master
-      # - ecr_push:
+                only: main
+      - ecr_push:
+          requires:
+            - test
+          filters:
+            branches:
+                only: main
+      # # - deploy_main:
       #     requires:
       #       - test
       #     filters:
       #       branches:
-      #           only: master
-      # # - deploy_master:
-      #     requires:
-      #       - test
-      #     filters:
-      #       branches:
-      #           only: master
+      #           only: main
