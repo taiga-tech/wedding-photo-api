@@ -147,12 +147,12 @@ workflows:
           filters:
             branches:
                 only: main
-      - ecr_push:
-          requires:
-            - test
-          filters:
-            branches:
-                only: main
+      # - ecr_push:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #           only: main
       # # - deploy_main:
       #     requires:
       #       - test
