@@ -30,8 +30,8 @@ ENV COMPOSER_HOME /composer
 
 ENV PATH $PATH:/composer/vendor/bin
 
-COPY ./docker/api/entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# COPY ./docker/api/entrypoint.sh /usr/local/bin/
+# RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.6.0/wait /wait
 RUN chmod +x /wait
@@ -40,9 +40,11 @@ WORKDIR /var/www
 COPY ./src /var/www
 RUN chown -R www-data:www-data /var/www
 
+# RUN echo $PRODUCTION_ENV_FILE | base64 -di > .env.production
+
 RUN composer global require "laravel/installer"
 
-RUN echo 'alias ar="php artisan"' >> ~/.bashrc \
-    && echo 'alias watch="npm run watch-poll"' >> ~/.bashrc
+RUN echo 'alias ar="php artisan"' >> ~/.bashrc
+    # && echo 'alias watch="npm run watch-poll"' >> ~/.bashrc
 
 # CMD /wait && /usr/local/bin/entrypoint.sh
