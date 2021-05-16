@@ -11,8 +11,12 @@
 
 ## Description
 
-API for sharing photos of weddings and wedding receptions
+This app works by combining the following two repositories
 
+Frontend: https://github.com/taiga-tech/wedding-photo-nuxt/
+Image optimization: https://github.com/taiga-tech/lambda-edge-image-convert/
+
+API for sharing photos of weddings and wedding receptions
 
 **Demo:**
 
@@ -61,3 +65,7 @@ docker compose up -d
 ## License
 
 - [MIT](https://github.com/taiga-tech/wedding-photo-api/blob/master/LICENSE/)
+
+## todo
+
+- [ ] Configure a scaleable infrastructure
