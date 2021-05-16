@@ -54,8 +54,9 @@ class PostsController extends Controller
                 $filename = "{$timeStamp}_{$index}.{$ext}";
                 $photo = Storage::disk('s3')
                     ->putFileAs(
-                        Auth::user()->name.'/post/photos/'.$post->id,
-                        $e['photo'], $filename,
+                        'room/'.Auth::user()->name.'/'.$post->nickname.'/id_'.$post->id,
+                        $e['photo'],
+                        $filename,
                         'public'
                     );
                 // $path = Storage::disk('s3')->url($photo);
