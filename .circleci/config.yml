@@ -36,6 +36,7 @@ commands:
           name: Run Test
           command: |
             docker-compose -f docker-compose.yml run api php artisan test
+            docker-compose -f docker-compose.yml run api ./vendor/bin/php-cs-fixer fix --diff --dry-run .
 
   api_image_push:
     steps:
