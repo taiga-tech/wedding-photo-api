@@ -40,7 +40,7 @@ commands:
   fixer_run:
     steps:
       - run:
-          name: Run Test
+          name: Fixer Test
           command: |
             docker-compose -f docker-compose.yml run api ./vendor/bin/php-cs-fixer fix --diff --dry-run .
 
