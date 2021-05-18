@@ -22,15 +22,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->role == 1)
-        {
+        if (Auth::user()->role == 1) {
             $posts = User::with('posts.photos')->get();
             $statusCode = 200;
         } else {
             $posts = 'Object not found';
             $statusCode = 404;
         }
-        return response( $posts, $statusCode );
+        return response($posts, $statusCode);
     }
 
     /**

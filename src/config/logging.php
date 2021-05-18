@@ -68,7 +68,7 @@ return [
             'webhook' => env('LOG_DISCORD_WEBHOOK_URL'),
             'level' => env('LOG_SLACK_LEVEL', 'critical'),
             'role_id' => null, // role to tag in the error
-            'environment' => env('APP_ENV','production'),
+            'environment' => env('APP_ENV', 'production'),
         ],
 
         'papertrail' => [

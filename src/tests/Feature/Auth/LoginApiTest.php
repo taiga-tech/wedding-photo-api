@@ -26,7 +26,8 @@ class LoginApiTest extends TestCase
         $response = $this
             ->json(
                 'POST',
-                route('login'), [
+                route('login'),
+                [
                 'login_id' => $this->user->login_id,
                 'password' => 'password',
                 ],

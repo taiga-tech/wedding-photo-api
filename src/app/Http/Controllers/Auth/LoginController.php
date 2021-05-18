@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use Socialite;
 
-
 class LoginController extends Controller
 {
     /*

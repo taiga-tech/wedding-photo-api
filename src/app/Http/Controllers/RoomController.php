@@ -13,18 +13,18 @@ class RoomController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index( $roomId )
+    public function index($roomId)
     {
         if (Auth::id() == $roomId) {
-            $posts = Post::where( 'user_id', $roomId )
-                ->with( 'user', 'photos' )
+            $posts = Post::where('user_id', $roomId)
+                ->with('user', 'photos')
                 ->get();
             $statusCode = 200;
         } else {
             $posts = 'Object not found';
             $statusCode = 404;
         }
-        return response( $posts, $statusCode );
+        return response($posts, $statusCode);
     }
 
     // public function show( $roomId, $id )

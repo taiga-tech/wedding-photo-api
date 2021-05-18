@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
@@ -8,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,8 +22,7 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 
-Route::group(['middleware' => 'api'], function ()
-{
+Route::group(['middleware' => 'api'], function () {
     Route::post('/register', [RegisterController::class, 'register'])
         ->name('register');
 
@@ -44,7 +45,7 @@ Route::group(['middleware' => 'api'], function ()
     Route::get('/posts/{download}', [PostsController::class, 'download']);
 });
 
-Route::middleware(['auth','can:isAdmin'])->group(function(){
+Route::middleware(['auth','can:isAdmin'])->group(function () {
     Route::apiResource('/admin', AdminController::class)
         ->except('update');
 });
