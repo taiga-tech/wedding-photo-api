@@ -64,28 +64,28 @@ class PhotoSubmitApiTest extends TestCase
     /**
      * @test
      */
-    // public function should_データベースエラーの場合はファイルを保存しない()
-    // {
-    //     Schema::drop('post_photos');
+    public function should_データベースエラーの場合はファイルを保存しない()
+    {
+        Schema::drop('post_photos');
 
-    //     Storage::fake('s3');
+        Storage::fake('s3');
 
-    //     $response = $this
-    //         ->actingAs($this->user)
-    //         ->json(
-    //             'POST',
-    //             route('posts.store'),
-    //             [
-    //                 'nickname' => $this->faker->name,
-    //                 'message' => $this->faker->name,
-    //                 'aspect' => $this->aspects,
-    //                 'files' => $this->photos,
-    //             ],
-    //             ['X-Requested-With' => 'XMLHttpRequest']
-    //         );
+        $response = $this
+            ->actingAs($this->user)
+            ->json(
+                'POST',
+                route('posts.store'),
+                [
+                    'nickname' => $this->faker->name,
+                    'message' => $this->faker->name,
+                    'aspect' => $this->aspects,
+                    'files' => $this->photos,
+                ],
+                ['X-Requested-With' => 'XMLHttpRequest']
+            );
 
-    //     $response->assertStatus(500);
+        $response->assertStatus(500);
 
-    //     $this->assertEquals(0, count(Storage::cloud()->files()));
-    // }
+        $this->assertEquals(0, count(Storage::cloud()->files()));
+    }
 }
