@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\PostPhotos;
+use App\Http\Requests\PostRequest;
 use Storage;
 
 class PostsController extends Controller
@@ -26,10 +27,10 @@ class PostsController extends Controller
      */
     // public function index()
     // {
-        // $posts = $this->posts->all();
-        // $posts = Post::with('user', 'photos')->get();
+    // $posts = $this->posts->all();
+    // $posts = Post::with('user', 'photos')->get();
 
-        // return response($posts, 200);
+    // return response($posts, 200);
     // }
 
     /**
@@ -38,18 +39,19 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+
+    // public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $post = new Post;
+        $post = new Post();
         $input = $request->all();
         $input['user_id'] = Auth::id();
         $files = $request->file('files');
         $post = $this->posts->create($input);
         $timeStamp = date('Ymd-His');
-        if ($files)
-        {
-            foreach ($files as $index => $e)
-            {
+        if ($files) {
+            foreach ($files as $index => $e) {
                 $ext = $e['photo']->guessExtension();
                 $filename = "{$timeStamp}_{$index}.{$ext}";
                 $photo = Storage::disk('s3')
@@ -67,6 +69,9 @@ class PostsController extends Controller
                         'aspect' => $input['aspect'][$index],
                     ]);
             }
+        } else {
+            $post = '画像を送信してください。';
+            return response($post, 400);
         }
 
         return $post;
