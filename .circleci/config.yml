@@ -36,6 +36,12 @@ commands:
           name: Run Test
           command: |
             docker-compose -f docker-compose.yml run api php artisan test
+
+  fixer_run:
+    steps:
+      - run:
+          name: Run Test
+          command: |
             docker-compose -f docker-compose.yml run api ./vendor/bin/php-cs-fixer fix --diff --dry-run .
 
   api_image_push:
@@ -115,6 +121,7 @@ jobs:
       - docker_setup
       - laravel_setup
       - test_run
+      - fixer_run
       - test_notification_to_discord
       # - test_notification
 
