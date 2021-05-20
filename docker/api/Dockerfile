@@ -9,6 +9,14 @@ RUN apt-get update \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
+RUN apt-get install -y locales locales-all \
+    && echo "ja_JP.UTF-8 UTF-8" > /etc/locale.gen \
+    && locale-gen \
+    && update-locale LANG=ja_JP.UTF-8
+
+ENV LANG="ja_JP.UTF-8" \
+    TZ="Asia/Tokyo"
+
 # Node.js install
 # RUN curl -sL https://deb.nodesource.com/setup_15.x | bash -
 # RUN apt-get install -y nodejs
