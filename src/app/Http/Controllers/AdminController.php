@@ -23,13 +23,13 @@ class AdminController extends Controller
     public function index()
     {
         if (Auth::user()->role == 1) {
-            $posts = User::with('posts.photos')->get();
+            $users = User::all();
             $statusCode = 200;
         } else {
-            $posts = 'Object not found';
+            $users = 'Object not found';
             $statusCode = 404;
         }
-        return response($posts, $statusCode);
+        return response($users, $statusCode);
     }
 
     /**
@@ -38,10 +38,10 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
 
     /**
      * Display the specified resource.
@@ -51,7 +51,15 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        if (Auth::user()->role == 1) {
+            // $user = User::with('posts.photos')->get();
+            $user = User::with('posts.photos')->find($id);
+            $statusCode = 200;
+        } else {
+            $user = 'Object not found';
+            $statusCode = 404;
+        }
+        return response($user, $statusCode);
     }
 
     /**
@@ -60,8 +68,31 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy(Request $request, $id)
+    // {
+    //     //
+    // }
+
+    /**
+     * Receives an array and deletes the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function delete(Request $request)
     {
-        //
+        if (Auth::user()->role == 1) {
+            $input = $request->all();
+            foreach ($input as $index => $e) {
+                $post = Post::find($e['id']);
+                $post->delete();
+                $statusCode = 200;
+            }
+        } else {
+            $post = 'Object not found';
+            $statusCode = 404;
+        }
+        return response($post, $statusCode);
     }
 }
