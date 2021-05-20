@@ -34,18 +34,23 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::get('/current_user', function () {
         return Auth::user();
-    });
+    })->name('current_user');
 
     //----------------------------------------------------------------
     Route::apiResource('/posts', PostsController::class)
         ->except('index', 'show', 'update', 'destroy');
 
-    Route::get('/room/{roomId}', [RoomController::class, 'index']);
+    Route::get('/room/{roomId}', [RoomController::class, 'index'])
+        ->name('room.index');
 
-    Route::get('/posts/{download}', [PostsController::class, 'download']);
+    Route::get('/posts/{download}', [PostsController::class, 'download'])
+        ->name('posts.download');
 });
 
 Route::middleware(['auth','can:isAdmin'])->group(function () {
     Route::apiResource('/admin', AdminController::class)
-        ->except('update');
+        ->except('store', 'update', 'destroy');
+
+    Route::post('/admin/{admin}', [AdminController::class, 'delete'])
+        ->name('admin.destroy');
 });
