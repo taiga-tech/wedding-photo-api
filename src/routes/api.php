@@ -43,7 +43,7 @@ Route::group(['middleware' => 'api'], function () {
     Route::get('/room/{roomId}', [RoomController::class, 'index'])
         ->name('room.index');
 
-    Route::get('/posts/{download}', [PostsController::class, 'download'])
+    Route::get('/posts/download/{download}', [PostsController::class, 'download'])
         ->name('posts.download');
 });
 
