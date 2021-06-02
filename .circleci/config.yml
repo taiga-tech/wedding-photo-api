@@ -121,7 +121,7 @@ jobs:
       - docker_setup
       - laravel_setup
       - test_run
-      - fixer_run
+      # - fixer_run
       - test_notification_to_discord
       # - test_notification
 
